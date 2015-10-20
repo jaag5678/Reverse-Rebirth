@@ -1,5 +1,5 @@
 #include"basic.h"
-#include<stdio.h>
+#include"ncurses.h"
 int a[8][8];
 
 void creatmb() {
@@ -23,22 +23,44 @@ void creatmb() {
 void printb() {
 	
 	int i, j;
+	init_pair(2, COLOR_MAGENTA, COLOR_GREEN);
+	init_pair(3, COLOR_WHITE, COLOR_GREEN);
+	init_pair(4, COLOR_BLACK, COLOR_GREEN);
+	init_pair(5, COLOR_RED, COLOR_YELLOW);
+	
+	attrset(COLOR_PAIR(5));
 	for(i = 0; i < 8; i++)
-		printf("%d ", i);
+		printw("%d ", i);
 
-	printf("\n");
+	printw("\n");
 	
 	for(i = 0; i < 8; i++)
-		printf("--");
+		printw("--");
 
-	printf("\n");
-		
+	printw("\n");
+	
+	attrset(COLOR_PAIR(2));		
 	for(i = 0; i < 8; i++) {
 		for(j = 0; j < 8; j++) {
-			printf("%d ", a[j][i]);
+			if(a[j][i] == 0) 
+				printw("_ ");
+			else if(a[j][i] == 1) {
+				attron(COLOR_PAIR(3) | A_BOLD);
+				printw("O ");
+				attroff(COLOR_PAIR(3) | A_BOLD);
+			}	
+			else {
+				attron(COLOR_PAIR(4) | A_BOLD);
+				printw("O ");
+				attroff(COLOR_PAIR(4) | A_BOLD);				
+			}
+			attrset(COLOR_PAIR(2));		
 		}
-		printf(" | %d\n", i);
+		attrset(COLOR_PAIR(5));
+		printw(" | %d\n", i);
+		attrset(COLOR_PAIR(2));	
 	}
+	getch();	
 }
 void valid(int x, int y, int turn) {
 	
@@ -64,9 +86,9 @@ void valid(int x, int y, int turn) {
 		
 	// Now need to analyze this after loop
 		if(x - i == 1) 
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else if (a[i][y] == 0)
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else {
 			s.a = LEFT; //VALID
 			change(s.a, i, x, y, turn);
@@ -85,9 +107,9 @@ void valid(int x, int y, int turn) {
 		
 	// Now need to analyze this after loop
 		if(i - x == 1) 
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else if (a[i][y] == 0)
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else {
 			s.a = RIGHT; //VALID
 			change(s.a, i, x, y, turn);
@@ -105,9 +127,9 @@ void valid(int x, int y, int turn) {
 		
 	// Now need to analyze this after loop
 		if(y - i == 1) 
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else if (a[x][i] ==0)
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else {
 			s.a = UP; //VALID
 			change(s.a, i , x, y, turn);
@@ -124,9 +146,9 @@ void valid(int x, int y, int turn) {
 		
 	// Now need to analyze this after loop
 		if(i - y == 1) 
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else if (a[x][i] == 0)
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else {
 			s.a = DOWN; //VALID	
 			change(s.a, i, x, y, turn);
@@ -144,9 +166,9 @@ void valid(int x, int y, int turn) {
 		
 	// Now need to analyze this after loop
 		if(i == 2) 
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else if (a[x+i-1][y+i-1] == 0)
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else {
 			s.a = DDOWNR; //VALID	
 			change(s.a, i, x, y, turn);
@@ -164,9 +186,9 @@ void valid(int x, int y, int turn) {
 		
 	// Now need to analyze this after loop
 		if(i == 2) 
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else if (a[x-i+1][y-i+1] == 0)
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else {
 			s.a = DUPL; //VALID	
 			change(s.a, i, x, y, turn);
@@ -184,9 +206,9 @@ void valid(int x, int y, int turn) {
 		
 	// Now need to analyze this after loop
 		if(i == 2) 
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else if (a[x+i-1][y-i+1] == 0)
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else {
 			s.a = DUPR; //VALID	
 			change(s.a, i, x, y, turn);
@@ -204,27 +226,36 @@ void valid(int x, int y, int turn) {
 		
 	// Now need to analyze this after loop
 		if(i == 2) 
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else if (a[x-i+1][y+i-1] == 0)
-			printf(" ");//INVALID
+			printw(" ");//INVALID
 		else {
 			s.a = DDOWNL; //VALID	
 			change(s.a, i, x, y, turn);
 		}
 			
-		printf("\n");	
+		printw("\n");
+		init_pair(1, COLOR_YELLOW, COLOR_BLUE);
+		attrset(COLOR_PAIR(1));	
 		if(s.a == 0) {
-			printf("INVALID MOVE PLAY AGAIN\n");
+			printw("INVALID MOVE PLAY AGAIN\n");
 			if(t == 1) {
-				printf("Player 2's turn\n");	
-				scanf("%d%d", &x, &y);		
+				printw("Player 2's turn");	
+				attron(COLOR_PAIR(4) | A_BOLD);
+				printw(" O\n");
+				attroff(COLOR_PAIR(4) | A_BOLD);
+				scanw("%d%d", &x, &y);		
 				valid(x,y,2);
 			}	
 			else {
-				printf("Player 1's turn\n");
-				scanf("%d%d", &x, &y);		
+				printw("Player 1's turn");
+				attron(COLOR_PAIR(3) | A_BOLD);
+				printw(" O\n");
+				attroff(COLOR_PAIR(3) | A_BOLD);
+				scanw("%d%d", &x, &y);		
 				valid(x,y,1);
-			}	
+			}
+			attroff(COLOR_PAIR(1));	
 		}									
 }
 

@@ -1,30 +1,52 @@
-#include<stdio.h>
+#include<ncurses.h>
 #include<stdlib.h>
 #include"basic.h"
 
 int main() {
 	
 	int x, y, i, t;
+	initscr();
+	start_color();
+	
+	init_pair(1, COLOR_YELLOW, COLOR_BLUE);
+	attrset(COLOR_PAIR(1));
+	for(i = 0; i < 50; i++) {
+		refresh();
+		printw("OTHELLO");
+		napms(100);
+		move(i+1, i+1);
+		
+	}	
+	clear();
 	creatmb();
 	printb();
 	
 	t = 1;
-	printf("Player 1's turn\n");
+	
+	attrset(COLOR_PAIR(1));
+	printw("\nPlayer 1's turn\n");
 	for(i = 0; i < 64; i++) {
-		scanf("%d%d", &x, &y);
+		scanw("%d%d", &x, &y);
 		valid(x,y,t);
+		clear();
 		printb();
+		refresh();
+		attrset(COLOR_PAIR(1));
+		printw("\n");
 		
 		if(t == 1) {
-			printf("Player 2's turn\n");
+			printw("Player 2's turn\n");
 			t = 2;
 		}	
 		else {
-			printf("Player 1's turn\n");
+			printw("Player 1's turn\n");
 			t = 1;	
 		}	
 	}	
-	printf("HI\n");
+	
+	endresult();
+	getch();
+	endwin();
 	
 	return 0;
 }	
