@@ -1,6 +1,5 @@
 #include"basic.h"
 #include"ncurses.h"
-int a[8][8];
 
 void creatmb() {
 	
@@ -22,28 +21,41 @@ void creatmb() {
 // We supply the coordinates to the func to see if the move is valid
 void printb() {
 	
-	int i, j;
+	int i, j, k = 0;
 	init_pair(2, COLOR_MAGENTA, COLOR_GREEN);
 	init_pair(3, COLOR_WHITE, COLOR_GREEN);
 	init_pair(4, COLOR_BLACK, COLOR_GREEN);
 	init_pair(5, COLOR_RED, COLOR_YELLOW);
 	
+	printw("VS HUMAN [");
+	printw("Type -1 to Save]");
 	attrset(COLOR_PAIR(5));
-	for(i = 0; i < 8; i++)
-		printw("%d ", i);
-
+	
+	move(k,53);
+	for(i = 0; i < 8; i++)  
+		printw(" %d", i);
+	k++;
+	printw(" ");
 	printw("\n");
 	
-	for(i = 0; i < 8; i++)
+	move(k,53);
+	for(i = 0; i < 8; i++) 
 		printw("--");
-
+	printw(" ");	
+	k++;
 	printw("\n");
-	
-	attrset(COLOR_PAIR(2));		
+		
 	for(i = 0; i < 8; i++) {
+		move(k, 50);
+		attrset(COLOR_PAIR(5));	
+		printw("%d |", i);
+		attrset(COLOR_PAIR(2));
+		printw(" ");
 		for(j = 0; j < 8; j++) {
-			if(a[j][i] == 0) 
+			if(a[j][i] == 0) {
+				attrset(COLOR_PAIR(2)); 
 				printw("_ ");
+			}	
 			else if(a[j][i] == 1) {
 				attron(COLOR_PAIR(3) | A_BOLD);
 				printw("O ");
@@ -56,18 +68,35 @@ void printb() {
 			}
 			attrset(COLOR_PAIR(2));		
 		}
+		k++;
 		attrset(COLOR_PAIR(5));
-		printw(" | %d\n", i);
+		printw("| %d\n", i);
 		attrset(COLOR_PAIR(2));	
 	}
+	
+	attrset(COLOR_PAIR(5));
+	move(k,53);
+	for(i = 0; i < 8; i++) 
+		printw("--");
+	printw(" ");	
+	k++;
+	move(k,53);
+	for(i = 0; i < 8; i++)  
+		printw(" %d", i);
+	printw(" ");	
+	k++;
+	printw("\n");
+	printw("\n");
+	
 	getch();	
 }
-void valid(int x, int y, int turn) {
+int valid(int x, int y, int turn, int st) {
 	
-	direct s;
+	stack *s;
+	direct z;
+	s = malloc(sizeof(stack));
+	init(s);
 	int i, j = 0, t;
-	
-	s.a = 0;
 	
 	if(turn == P1)
 		t = 2;
@@ -85,15 +114,16 @@ void valid(int x, int y, int turn) {
 		}
 		
 	// Now need to analyze this after loop
-		if(x - i == 1) 
-			printw(" ");//INVALID
-		else if (a[i][y] == 0)
-			printw(" ");//INVALID
-		else {
-			s.a = LEFT; //VALID
-			change(s.a, i, x, y, turn);
+		if(!((x - i) == 1) && !(a[i][y] == 0) && !(x == i)) {
+			if(st == VMOV)
+				return 1; 
+			z.a = LEFT; //VALID
+			z.i = i;
+			if(st == COMP1) {
+				return 1;
+			}	 
+			push(s, z);
 		}	
-			//s.i[0] = i-1;
 			
 	// Second we go right.. note that y is constant
 		for(i = x; i < 7; i++) {
@@ -106,13 +136,15 @@ void valid(int x, int y, int turn) {
 		}
 		
 	// Now need to analyze this after loop
-		if(i - x == 1) 
-			printw(" ");//INVALID
-		else if (a[i][y] == 0)
-			printw(" ");//INVALID
-		else {
-			s.a = RIGHT; //VALID
-			change(s.a, i, x, y, turn);
+		if(!((i - x) == 1) && !(a[i][y] == 0) && !(x == i)) { 
+			if(st == VMOV)
+				return 1; 
+			z.a = RIGHT; //VALID
+			z.i = i;
+			if(st == COMP1) {
+				return 1;
+			}	 
+			push(s, z);
 		}	
 					
 	// Third we go up.. note that x is constant
@@ -126,13 +158,15 @@ void valid(int x, int y, int turn) {
 		}
 		
 	// Now need to analyze this after loop
-		if(y - i == 1) 
-			printw(" ");//INVALID
-		else if (a[x][i] ==0)
-			printw(" ");//INVALID
-		else {
-			s.a = UP; //VALID
-			change(s.a, i , x, y, turn);
+		if(!((y - i) == 1) && !(a[x][i] ==0) && !(y == i)) { 
+			if(st == VMOV)
+				return 1; 
+			z.a = UP; //VALID
+			z.i = i;
+			if(st == COMP1) {
+				return 1;
+			}	 
+			push(s, z);
 		}	
 	// Fourth we go down.. note that x is constant
 		for(i = y; i < 7; i++) {
@@ -145,17 +179,19 @@ void valid(int x, int y, int turn) {
 		}
 		
 	// Now need to analyze this after loop
-		if(i - y == 1) 
-			printw(" ");//INVALID
-		else if (a[x][i] == 0)
-			printw(" ");//INVALID
-		else {
-			s.a = DOWN; //VALID	
-			change(s.a, i, x, y, turn);
+		if(!((i - y) == 1) && !(a[x][i] == 0) && !(y == i)) {
+			if(st == VMOV)
+				return 1; 
+			z.a = DOWN; //VALID
+			z.i = i;
+			if(st == COMP1) {
+				return 1;
+			}	 
+			push(s, z);	
 		}		
 	
 	// Fifth we go DIAGONALLY RIGHT DOWN.. 
-		for(i = 1; ((x+i) < 8 && (y+i)<8); i++) {
+		for(i = 1; ((x+i) < 8 && (y+i) < 8); i++) {
 			if(a[x+i][y+i] == t)
 				continue;
 			else {
@@ -165,13 +201,15 @@ void valid(int x, int y, int turn) {
 		}
 		
 	// Now need to analyze this after loop
-		if(i == 2) 
-			printw(" ");//INVALID
-		else if (a[x+i-1][y+i-1] == 0)
-			printw(" ");//INVALID
-		else {
-			s.a = DDOWNR; //VALID	
-			change(s.a, i, x, y, turn);
+		if(!(i == 2) && !(a[x+i-1][y+i-1] == 0)) {
+			if(st == VMOV)
+				return 1; 
+			z.a = DDOWNR; //VALID
+			z.i = i;
+			if(st == COMP1) {
+				return 1;
+			}	 
+			push(s, z);		
 		}
 			
 	// Sixth we go DIAGONALLY LEFT UP.. 
@@ -183,15 +221,19 @@ void valid(int x, int y, int turn) {
 				break;
 			}	
 		}
+		if(i == 1)
+			i++;
 		
 	// Now need to analyze this after loop
-		if(i == 2) 
-			printw(" ");//INVALID
-		else if (a[x-i+1][y-i+1] == 0)
-			printw(" ");//INVALID
-		else {
-			s.a = DUPL; //VALID	
-			change(s.a, i, x, y, turn);
+		if(!(i == 2) && !(a[x-i+1][y-i+1] == 0)) { 
+			if(st == VMOV)
+				return 1; 
+			z.a = DUPL; //VALID
+			z.i = i;
+			if(st == COMP1) {
+				return 1;
+			}	 
+			push(s, z);		
 		}			
 	
 	// Seventh we go DIAGONALLY RIGHT UP.. 
@@ -203,15 +245,19 @@ void valid(int x, int y, int turn) {
 				break;
 			}	
 		}
+		if(i == 1)
+			i++;
 		
 	// Now need to analyze this after loop
-		if(i == 2) 
-			printw(" ");//INVALID
-		else if (a[x+i-1][y-i+1] == 0)
-			printw(" ");//INVALID
-		else {
-			s.a = DUPR; //VALID	
-			change(s.a, i, x, y, turn);
+		if(!(i == 2) && !(a[x+i-1][y-i+1] == 0)) { 
+			if(st == VMOV)
+				return 1; 
+			z.a = DUPR; //VALID
+			z.i = i;
+			if(st == COMP1) {
+				return 1;
+			}	 
+			push(s, z);		
 		}			
 	
 	// Eighth we go DIAGONALLY LEFT DOWN.. 
@@ -223,39 +269,53 @@ void valid(int x, int y, int turn) {
 				break;
 			}	
 		}
-		
+		if(i == 1)
+			i++;
 	// Now need to analyze this after loop
-		if(i == 2) 
-			printw(" ");//INVALID
-		else if (a[x-i+1][y+i-1] == 0)
-			printw(" ");//INVALID
-		else {
-			s.a = DDOWNL; //VALID	
-			change(s.a, i, x, y, turn);
+		if(!(i == 2) && !(a[x-i+1][y+i-1] == 0)) { 
+			if(st == VMOV)
+				return 1; 
+			z.a = DDOWNL;
+			z.i = i; //VALID
+			if(st == COMP1) {
+				return 1;
+			}	 
+			push(s, z);		
 		}
+		if(st == VMOV) 
+			return -1;
+		if(st == COMP1)
+			return -1;	
 			
-		printw("\n");
-		init_pair(1, COLOR_YELLOW, COLOR_BLUE);
-		attrset(COLOR_PAIR(1));	
-		if(s.a == 0) {
+		if(empty(s)) {	
+			printw("\n");
+			init_pair(1, COLOR_YELLOW, COLOR_BLUE);
+			attrset(COLOR_PAIR(1));	
 			printw("INVALID MOVE PLAY AGAIN\n");
 			if(t == 1) {
 				printw("Player 2's turn");	
 				attron(COLOR_PAIR(4) | A_BOLD);
 				printw(" O\n");
-				attroff(COLOR_PAIR(4) | A_BOLD);
-				scanw("%d%d", &x, &y);		
-				valid(x,y,2);
-			}	
+				scanw("%d%d", &x, &y);
+				attroff(COLOR_PAIR(4) | A_BOLD);		
+				valid(x,y,2, PLAY);
+			}
 			else {
 				printw("Player 1's turn");
 				attron(COLOR_PAIR(3) | A_BOLD);
 				printw(" O\n");
-				attroff(COLOR_PAIR(3) | A_BOLD);
-				scanw("%d%d", &x, &y);		
-				valid(x,y,1);
-			}
-			attroff(COLOR_PAIR(1));	
+				scanw("%d%d", &x, &y);
+				attroff(COLOR_PAIR(3) | A_BOLD);		
+				valid(x,y,1, PLAY);
+				attroff(COLOR_PAIR(1));
+			}		
+		}
+		else {		
+			while(!empty(s)) {
+				z = pop(s);
+				printw("%d %d", z.a, z.i);
+				change(z.a, z.i, x, y, turn);
+			}	 	
 		}									
 }
 
@@ -335,7 +395,8 @@ void endresult() {
 		printf("Player 2 wins\n");
 	else
 		printf("It's a draw\n");
-		
+	
+	menu();	
 }				  
   
   

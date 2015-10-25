@@ -1,0 +1,25 @@
+This program is made to play the game Othello
+	If in case one does not know the rules or what Othello is check this
+	link..
+		http://www.site-constructor.com/othello/othellorules.html
+
+NOTE: The program I have written is still in progress..
+	**It does not yet control the rule of "No avail moves then end 	game" 
+	
+	**However 2 people can play this game against each other til the board gets filled.. Then the winner is evaluated
+	
+	** BLACK COIN - No 1
+	** WHITE COIN - No 2
+	
+	**The aim for each player is to play a valid move by typing the coordinates of the location you want to place your coin on the board
+	
+THE PROGRAM IS STILL UNDER DEVELOPMENT !!
+	The part where the computer plays against one human is something I'm currently working on.. Prt by part i would update the code I 		Upload...
+	
+GUI IS THE LAST STEP:
+	The GUI for this game is something I'm gonna work in the end!!
+
+I'M OPEN TO SUGGESTIONS! 
+	Plz feel free to suggest any changes I can make for this code! I would appreciate it!:))
+	
+								-jaag5678
