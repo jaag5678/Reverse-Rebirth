@@ -194,6 +194,15 @@ void menu() {
 							vs_comp1();
 						}	
 						break;
+						case 2: {
+							clear();
+							init_pair(1, COLOR_YELLOW, COLOR_BLUE);
+							attrset(COLOR_PAIR(1));
+							creatmb();
+							printb();
+							vs_comp2();
+						}
+						break;	
 					}			
 				break;
 				}
@@ -230,17 +239,22 @@ void menu() {
 
 void vs_human() {
 	int i, tog = 0;
-	int x, y;
+	int x, y, ty;
 	
 	attrset(COLOR_PAIR(1));
 	for(i = 0; i < 64; i++) {
 		
 		int d, b, c;
 		c = -1;
+		if(t == 1)
+			ty = 2;
+		else
+			ty = 1;	
+			
 		for(d = 0; d < 8; d++) {
 			for(b = 0; b < 8; b++) {
 				if(a[d][b] == 0)
-					c = valid(d, b, t, VMOV);
+					c = valid(d, b, ty, VMOV);
 				if(c == 1) 
 					break;
 			}	
@@ -372,7 +386,7 @@ void vs_comp1() {
 
 	//First need var for coordinates
 	//printw("Hi");
-	int x, y;
+	int x, y, ty;
 	int i, tog = 0;
 	
 	attrset(COLOR_PAIR(1));
@@ -380,10 +394,15 @@ void vs_comp1() {
 		
 		int d, b, c;
 		c = -1;
+		if(t == 1) 
+			ty = 2;
+		else
+			ty = 1;
+				
 		for(d = 0; d < 8; d++) {
 			for(b = 0; b < 8; b++) {
 				if(a[d][b] == 0)
-					c = valid(d, b, t, VMOV);
+					c = valid(d, b, ty, VMOV);
 				if(c == 1) 
 					break;
 			}	
@@ -439,6 +458,106 @@ void vs_comp1() {
 	endresult();
 }		
 				
+void vs_comp2() {
+
+
+	int x, y, ty;
+	int i, tog = 0;
+	
+	attrset(COLOR_PAIR(1));
+	for(i = 0; i < 64; i++) {
+		
+		int d, e, c;
+		c = -1;
+		if(t == 1) 
+			ty = 2;
+		else
+			ty = 1;
+				
+		for(d = 0; d < 8; d++) {
+			for(e = 0; e < 8; e++) {
+				if(a[d][e] == 0)
+					c = valid(d, e, ty, VMOV);
+				if(c == 1) 
+					break;
+			}	
+			if(c == 1)	
+				break;
+		}
+		
+		if(c == -1) {
+			tog++;
+			printw("NO VALID MOVES AVAIL\n");
+			if(t == 2)
+				t = 1;
+			else 
+				t = 2;
+				
+			if(tog == 2) 
+				endresult();		
+		}
+		else
+			tog = 0;
+		c = -1;
+		
+		if(t == 2) {
+			printw("Human's turn\n");
+			scanw("%d%d", &x, &y);
+			t = 1;
+			valid(x,y,t, PLAY);
+		}
+		else {	
+	// FIrst make b array zero
+			t = 2;
+			for(x = 0; x < 8; x ++) 
+				for(y = 0; y < 8; y++)
+					b[x][y] = 0;
+			
+	// Then make a double loop with the general calling of valid func
+			for(x = 0; x < 8; x ++) 
+				for(y = 0; y < 8; y++) 
+					valid(x, y, t, COMP2);			
+			
+	// However here the st is COMP2.. Which will make us to modify the func slightly
+	// Once as per our idea the thing is done.. check the max of elements in array b
+	
+			int max = b[0][0];
+			int max_x = 0; 
+			int max_y = 0;
+			for(x = 0; x < 8; x ++) { 
+				for(y = 0; y < 8; y++) { 
+					if(max < b[x][y]) { 
+						max = b[x][y];
+						max_x = x;
+						max_y = y;
+					}
+				}
+			}	
+			valid(max_x, max_y, t, PLAY);
+		}		
+		clear();
+		printb();
+		refresh();
+		attrset(COLOR_PAIR(1));
+		printw("\n");
+	}
+	endresult();
+}			
+				
+	// And pass the indices of the array to valid func with st as PLAY
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 
 
 

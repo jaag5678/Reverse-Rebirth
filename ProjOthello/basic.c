@@ -114,14 +114,17 @@ int valid(int x, int y, int turn, int st) {
 		}
 		
 	// Now need to analyze this after loop
-		if(!((x - i) == 1) && !(a[i][y] == 0) && !(x == i)) {
+		if(!((x - i) == 1) && !(a[i][y] == 0) && !(a[i][y] == t)  && !(x == i)) {
 			if(st == VMOV)
 				return 1; 
 			z.a = LEFT; //VALID
 			z.i = i;
 			if(st == COMP1) {
 				return 1;
-			}	 
+			}
+			if(st == COMP2) {
+				b[x][y] = b[x][y] + (x-i);
+			}		 
 			push(s, z);
 		}	
 			
@@ -136,7 +139,7 @@ int valid(int x, int y, int turn, int st) {
 		}
 		
 	// Now need to analyze this after loop
-		if(!((i - x) == 1) && !(a[i][y] == 0) && !(x == i)) { 
+		if(!((i - x) == 1) && !(a[i][y] == 0) && !(a[i][y] == t) && !(x == i)) { 
 			if(st == VMOV)
 				return 1; 
 			z.a = RIGHT; //VALID
@@ -144,6 +147,9 @@ int valid(int x, int y, int turn, int st) {
 			if(st == COMP1) {
 				return 1;
 			}	 
+			if(st == COMP2) {
+				b[x][y] = b[x][y] + (i - x);
+			}	
 			push(s, z);
 		}	
 					
@@ -158,7 +164,7 @@ int valid(int x, int y, int turn, int st) {
 		}
 		
 	// Now need to analyze this after loop
-		if(!((y - i) == 1) && !(a[x][i] ==0) && !(y == i)) { 
+		if(!((y - i) == 1) && !(a[x][i] ==0) && !(a[x][i] == t) && !(y == i)) { 
 			if(st == VMOV)
 				return 1; 
 			z.a = UP; //VALID
@@ -166,6 +172,9 @@ int valid(int x, int y, int turn, int st) {
 			if(st == COMP1) {
 				return 1;
 			}	 
+			if(st == COMP2) {
+				b[x][y] = b[x][y] + (y-i);
+			}	
 			push(s, z);
 		}	
 	// Fourth we go down.. note that x is constant
@@ -179,7 +188,7 @@ int valid(int x, int y, int turn, int st) {
 		}
 		
 	// Now need to analyze this after loop
-		if(!((i - y) == 1) && !(a[x][i] == 0) && !(y == i)) {
+		if(!((i - y) == 1) && !(a[x][i] == 0) && !(a[x][i] == t) && !(y == i)) {
 			if(st == VMOV)
 				return 1; 
 			z.a = DOWN; //VALID
@@ -187,6 +196,9 @@ int valid(int x, int y, int turn, int st) {
 			if(st == COMP1) {
 				return 1;
 			}	 
+			if(st == COMP2) {
+				b[x][y] = b[x][y] + (i - y);
+			}	
 			push(s, z);	
 		}		
 	
@@ -201,7 +213,7 @@ int valid(int x, int y, int turn, int st) {
 		}
 		
 	// Now need to analyze this after loop
-		if(!(i == 2) && !(a[x+i-1][y+i-1] == 0)) {
+		if(!(i == 2) && !(a[x+i-1][y+i-1] == 0) && !(a[x+i-1][y+i-1] == t)) {
 			if(st == VMOV)
 				return 1; 
 			z.a = DDOWNR; //VALID
@@ -209,6 +221,9 @@ int valid(int x, int y, int turn, int st) {
 			if(st == COMP1) {
 				return 1;
 			}	 
+			if(st == COMP2) {
+				b[x][y] = b[x][y] + i;
+			}	
 			push(s, z);		
 		}
 			
@@ -225,13 +240,16 @@ int valid(int x, int y, int turn, int st) {
 			i++;
 		
 	// Now need to analyze this after loop
-		if(!(i == 2) && !(a[x-i+1][y-i+1] == 0)) { 
+		if(!(i == 2) && !(a[x-i+1][y-i+1] == 0) && !(a[x-i+1][y-i+1] == t)) { 
 			if(st == VMOV)
 				return 1; 
 			z.a = DUPL; //VALID
 			z.i = i;
 			if(st == COMP1) {
 				return 1;
+			}	
+			if(st == COMP2) {
+				b[x][y] = b[x][y] + i;
 			}	 
 			push(s, z);		
 		}			
@@ -249,13 +267,16 @@ int valid(int x, int y, int turn, int st) {
 			i++;
 		
 	// Now need to analyze this after loop
-		if(!(i == 2) && !(a[x+i-1][y-i+1] == 0)) { 
+		if(!(i == 2) && !(a[x+i-1][y-i+1] == 0) && !(a[x+i-1][y-i+1] == t)) { 
 			if(st == VMOV)
 				return 1; 
 			z.a = DUPR; //VALID
 			z.i = i;
 			if(st == COMP1) {
 				return 1;
+			}	
+			if(st == COMP2) {
+				b[x][y] = b[x][y] + i;
 			}	 
 			push(s, z);		
 		}			
@@ -272,20 +293,25 @@ int valid(int x, int y, int turn, int st) {
 		if(i == 1)
 			i++;
 	// Now need to analyze this after loop
-		if(!(i == 2) && !(a[x-i+1][y+i-1] == 0)) { 
+		if(!(i == 2) && !(a[x-i+1][y+i-1] == 0) && !(a[x-i+1][y+i-1] == t)) { 
 			if(st == VMOV)
 				return 1; 
 			z.a = DDOWNL;
 			z.i = i; //VALID
 			if(st == COMP1) {
 				return 1;
+			}	
+			if(st == COMP2) {
+				b[x][y] = b[x][y] + i;
 			}	 
 			push(s, z);		
 		}
 		if(st == VMOV) 
 			return -1;
 		if(st == COMP1)
-			return -1;	
+			return -1;
+		if(st == COMP2)
+			return -1;		
 			
 		if(empty(s)) {	
 			printw("\n");
