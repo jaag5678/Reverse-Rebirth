@@ -32,21 +32,22 @@ void printb() {
 	attrset(COLOR_PAIR(5));
 	
 	move(k,53);
-	for(i = 0; i < 8; i++)  
-		printw(" %d", i);
-	k++;
 	printw(" ");
+	for(i = 0; i < 8; i++)  
+		printw(" %d ", i);
+	k++;
+	//printw(" ");
 	printw("\n");
 	
 	move(k,53);
 	for(i = 0; i < 8; i++) 
-		printw("--");
+		printw(" --");
 	printw(" ");	
 	k++;
 	printw("\n");
 		
 	for(i = 0; i < 8; i++) {
-		move(k, 50);
+		move(k+1, 50);
 		attrset(COLOR_PAIR(5));	
 		printw("%d |", i);
 		attrset(COLOR_PAIR(2));
@@ -54,36 +55,37 @@ void printb() {
 		for(j = 0; j < 8; j++) {
 			if(a[j][i] == 0) {
 				attrset(COLOR_PAIR(2)); 
-				printw("_ ");
+				printw(" _ ");
 			}	
 			else if(a[j][i] == 1) {
 				attron(COLOR_PAIR(3) | A_BOLD);
-				printw("O ");
+				printw(" O ");
 				attroff(COLOR_PAIR(3) | A_BOLD);
 			}	
 			else {
 				attron(COLOR_PAIR(4) | A_BOLD);
-				printw("O ");
+				printw(" O ");
 				attroff(COLOR_PAIR(4) | A_BOLD);				
 			}
 			attrset(COLOR_PAIR(2));		
 		}
-		k++;
+		k+=2;
 		attrset(COLOR_PAIR(5));
-		printw("| %d\n", i);
+		printw("| %d", i);
 		attrset(COLOR_PAIR(2));	
 	}
 	
 	attrset(COLOR_PAIR(5));
 	move(k,53);
 	for(i = 0; i < 8; i++) 
-		printw("--");
+		printw(" --");
 	printw(" ");	
 	k++;
 	move(k,53);
+	printw(" ");
 	for(i = 0; i < 8; i++)  
-		printw(" %d", i);
-	printw(" ");	
+		printw(" %d ", i);
+	//printw(" ");	
 	k++;
 	printw("\n");
 	printw("\n");

@@ -141,20 +141,78 @@ void menu() {
 	
 	int i, j;
 	
-	move((LINES/2) - 3, (COLS/2) -9);
-	attrset(COLOR_PAIR(5) | A_BOLD);
-	printw("***********OTHELLO***********\n");
-	attrset(COLOR_PAIR(1) | A_BOLD);
-	move((LINES/2) - 2, (COLS/2) -3);
-	printw(">>>>>> 1.START         \n");
-	move((LINES/2) - 1, (COLS/2) -3);
-	printw(">>>>>> 2.LOAD       \n");
-	move((LINES/2) , (COLS/2) -3);
-	printw(">>>>>> 3.HELP        \n");
-	move((LINES/2) + 1, (COLS/2) -3);
-	printw(">>>>>> 4.EXIT              \n");
-	move((LINES/2) + 3, (COLS/2) -3);
-	printw("\n\n-> Select your choice.......   ");
+	move((LINES/2) - 3, (COLS/2) -20);
+	attrset(COLOR_PAIR(5) | A_BOLD | A_UNDERLINE);
+	for(i = 0; i < 3; i++) {
+		printw(" ");
+		refresh();
+		napms(50);
+	}	
+	printw("O");
+	refresh();
+	for(i = 0; i < 3; i++) {
+		printw(" ");
+		refresh();
+		napms(50);
+	}	
+	printw("T");
+	refresh();
+	for(i = 0; i < 3; i++) {
+		printw(" ");
+		refresh();
+		napms(50);
+	}	
+	printw("H");
+	refresh();
+	for(i = 0; i < 3; i++) {
+		printw(" ");
+		refresh();
+		napms(50);
+	}	
+	printw("E");
+	refresh();
+	for(i = 0; i < 3; i++) {
+		printw(" ");
+		refresh();
+		napms(50);
+	}	
+	printw("L");
+	refresh();
+	for(i = 0; i < 3; i++) {
+		printw(" ");
+		refresh();
+		napms(50);
+	}	
+	printw("L");
+	refresh();
+	for(i = 0; i < 3; i++) {
+		printw(" ");
+		refresh();
+		napms(50);
+	}	
+	printw("O");
+	refresh();
+	for(i = 0; i < 3; i++) {
+		printw(" ");
+		refresh();
+		napms(50);
+	}	
+	napms(1000);
+	
+	//printw("***********OTHELLO*\n");
+	attroff(COLOR_PAIR(5));
+	//attrset(COLOR_PAIR(1) | A_BOLD | A_UNDERLINE);
+	move((LINES/2) - 2, (COLS/2) -10);
+	printw(">>>>>> 1.START\n");
+	move((LINES/2) - 1, (COLS/2) -10);
+	printw(">>>>>> 2.LOAD\n");
+	move((LINES/2) , (COLS/2) -10);
+	printw(">>>>>> 3.HELP\n");
+	move((LINES/2) + 1, (COLS/2) -10);
+	printw(">>>>>> 4.EXIT\n");
+	move((LINES/2) + 3, (COLS/2) -10);
+	attroff(A_UNDERLINE);
+	printw("\n\n-> Select your choice.......");
 	scanw("%d", &i);
 	
 	switch(i) {
