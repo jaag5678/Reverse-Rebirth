@@ -585,7 +585,7 @@ void vs_comp3() {
 	//refresh();
 	f = fopen(PT, "r");
 	for(k = 0; k < 8; k++)
-		for(j = 0; j < 8; j++);
+		for(j = 0; j < 8; j++)
 			fscanf(f, "%d", &b[j][k]);
 	//printw("HEHE\n");
 	//refresh();

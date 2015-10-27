@@ -588,6 +588,7 @@ void vs_comp3() {
 		for(j = 0; j < 8; j++)
 			fscanf(f, "%d", &b[j][k]);
 	//printw("HEHE\n");
+	
 	//refresh();
 	g = malloc(sizeof(prior));
 	
