@@ -30,6 +30,15 @@ typedef struct direct {
 	short int i;
 }direct;
 	
+// For ROXANNE
+#define PT "Letters/ROXANNE.txt"
+typedef struct prior {
+	int x, y;
+	int i;
+	int p;
+}prior;		
+prior *g;
+	
 
 int a[8][8];
 int b[8][8]; // Which player plays

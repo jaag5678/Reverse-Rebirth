@@ -114,6 +114,7 @@ int valid(int x, int y, int turn, int st) {
 	
 	stack *s;
 	direct z;
+	int cnt = 0;
 	s = malloc(sizeof(stack));
 	init(s);
 	int i, j = 0, t;
@@ -144,7 +145,10 @@ int valid(int x, int y, int turn, int st) {
 			}
 			if(st == COMP2) {
 				b[x][y] = b[x][y] + (x-i);
-			}		 
+			}
+			if(st == COMP3) {
+				cnt = cnt + (x - i);
+			}			 
 			push(s, z);
 		}	
 			
@@ -169,6 +173,9 @@ int valid(int x, int y, int turn, int st) {
 			}	 
 			if(st == COMP2) {
 				b[x][y] = b[x][y] + (i - x);
+			}	
+			if(st == COMP3) {
+				cnt = cnt + (i - x);
 			}	
 			push(s, z);
 		}	
@@ -195,6 +202,9 @@ int valid(int x, int y, int turn, int st) {
 			if(st == COMP2) {
 				b[x][y] = b[x][y] + (y-i);
 			}	
+			if(st == COMP3) {
+				cnt = cnt + (y - i);
+			}	
 			push(s, z);
 		}	
 	// Fourth we go down.. note that x is constant
@@ -218,6 +228,9 @@ int valid(int x, int y, int turn, int st) {
 			}	 
 			if(st == COMP2) {
 				b[x][y] = b[x][y] + (i - y);
+			}	
+			if(st == COMP3) {
+				cnt = cnt + (i-y);
 			}	
 			push(s, z);	
 		}		
@@ -243,6 +256,9 @@ int valid(int x, int y, int turn, int st) {
 			}	 
 			if(st == COMP2) {
 				b[x][y] = b[x][y] + i;
+			}	
+			if(st == COMP3) {
+				cnt = cnt + i;
 			}	
 			push(s, z);		
 		}
@@ -271,6 +287,9 @@ int valid(int x, int y, int turn, int st) {
 			if(st == COMP2) {
 				b[x][y] = b[x][y] + i;
 			}	 
+			if(st == COMP3) {
+				cnt = cnt + i;
+			}	
 			push(s, z);		
 		}			
 	
@@ -298,6 +317,9 @@ int valid(int x, int y, int turn, int st) {
 			if(st == COMP2) {
 				b[x][y] = b[x][y] + i;
 			}	 
+			if(st == COMP3) {
+				cnt = cnt + i;
+			}	
 			push(s, z);		
 		}			
 	
@@ -324,6 +346,9 @@ int valid(int x, int y, int turn, int st) {
 			if(st == COMP2) {
 				b[x][y] = b[x][y] + i;
 			}	 
+			if(st == COMP3) {
+				cnt = cnt + i;
+			}	
 			push(s, z);		
 		}
 		if(st == VMOV) 
@@ -332,6 +357,24 @@ int valid(int x, int y, int turn, int st) {
 			return -1;
 		if(st == COMP2)
 			return -1;		
+		if(st == COMP3) {
+			if(cnt != 0) {
+				if(b[x][y] > g->p) {
+					g->p = b[x][y];
+					g->x = x;
+					g->y = y;
+					g->i = cnt;
+				}
+				else if(b[x][y] == g->p) {
+					if(g->i < cnt) {
+						g->x = x;
+						g->y = y;
+						g->i = cnt;		
+					}
+				}
+			}
+			return 1;
+		}				
 			
 		if(empty(s)) {	
 			clear();

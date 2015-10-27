@@ -217,6 +217,17 @@ void menu() {
 							printb();
 							vs_comp2();
 						}
+						break;
+						case 3: {	
+							clear();
+							printw("VS COMP [");
+							printw("Type -1 to Save]");
+							init_pair(1, COLOR_YELLOW, COLOR_BLUE);
+							attrset(COLOR_PAIR(1));
+							creatmb();
+							printb();
+							vs_comp3();
+						}
 						break;	
 					}			
 				break;
@@ -562,7 +573,103 @@ void vs_comp2() {
 	endresult();
 }			
 				
+void vs_comp3() {
 	
+	int k, j;
+	int x, y, ty;
+	int i, tog = 0;
+	
+	// Make the priority table ready to refer
+	FILE *f;
+	//printw("HAHA\n");
+	//refresh();
+	f = fopen(PT, "r");
+	for(k = 0; k < 8; k++)
+		for(j = 0; j < 8; j++)
+			fscanf(f, "%d", &b[j][k]);
+	//printw("HEHE\n");
+	//refresh();
+	g = malloc(sizeof(prior));
+	
+	attrset(COLOR_PAIR(1));
+	for(i = 0; i < 64; i++) {
+		
+		int d, e, c;
+		c = -1;
+		if(t == 1) 
+			ty = 2;
+		else
+			ty = 1;
+				
+		for(d = 0; d < 8; d++) {
+			for(e = 0; e < 8; e++) {
+				if(a[d][e] == 0)
+					c = valid(d, e, ty, VMOV);
+				if(c == 1) 
+					break;
+			}	
+			if(c == 1)	
+				break;
+		}
+		
+		if(c == -1) {
+			tog++;
+			printw("NO VALID MOVES AVAIL\n");
+			if(t == 2)
+				t = 1;
+			else 
+				t = 2;
+				
+			if(tog == 2) 
+				endresult();		
+		}
+		else
+			tog = 0;
+		c = -1;
+		
+		if(t == 2) {
+			printw("Human's turn\n");
+			scanw("%d%d", &x, &y);
+			t = 1;
+			if(x == -1) {
+				save(t);
+				break;
+			}	
+			valid(x,y,t, PLAY);
+		}
+	//COMP S TURN
+	// Now call the func to check all valid moves using st COMP3
+		else {
+			g->x = 0;
+			g->y = 0;
+			g->i = 0;
+			g->p = -1;
+			t = 2;
+			for(k = 0; k < 8; k++) {
+				for(j = 0; j < 8; j++) { 
+					if(a[i][j] == 0) {
+						if(a[k][j] == 0)
+							valid(k, j, t, COMP3);
+					}		
+				}
+			}	
+	// now go and make app changes to the valid function
+	
+	//Once done now call valid func with the coord stored in g
+			valid(g->x, g->y, t, PLAY);
+		}	
+	//Done....
+		clear();
+		printb();
+		refresh();
+		attrset(COLOR_PAIR(1));
+		printw("\n");
+	}
+	endresult();
+}			
+				
+	
+		
 	
 	
 	
