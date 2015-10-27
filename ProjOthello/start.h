@@ -10,6 +10,7 @@ void fetch(char *);
 void call();
 void print();
 void rec();
+void lag();
 
 // Functions related to menu
 void menu();

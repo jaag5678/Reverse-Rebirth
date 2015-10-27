@@ -1,4 +1,5 @@
-#define LAG 50
+#define LAG_1 50
+#define LAG_2 70
 
 #define P1 1
 #define P2 2

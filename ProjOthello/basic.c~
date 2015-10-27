@@ -21,76 +21,96 @@ void creatmb() {
 // We supply the coordinates to the func to see if the move is valid
 void printb() {
 	
-	int i, j, k = 0;
-	init_pair(2, COLOR_MAGENTA, COLOR_GREEN);
-	init_pair(3, COLOR_WHITE, COLOR_GREEN);
-	init_pair(4, COLOR_BLACK, COLOR_GREEN);
-	init_pair(5, COLOR_RED, COLOR_YELLOW);
+	int i, j, k = 5, l;
+
 	
-	printw("VS HUMAN [");
-	printw("Type -1 to Save]");
 	attrset(COLOR_PAIR(5));
 	
 	move(k,53);
 	printw(" ");
 	for(i = 0; i < 8; i++)  
-		printw(" %d ", i);
+		printw("  %d  ", i);
 	k++;
 	//printw(" ");
 	printw("\n");
 	
-	move(k,53);
-	for(i = 0; i < 8; i++) 
-		printw(" --");
-	printw(" ");	
+	move(k,52);
+	for(i = 0; i < 7; i++) 
+		printw("  --  ");
 	k++;
-	printw("\n");
+	printw(" \n");
 		
 	for(i = 0; i < 8; i++) {
-		move(k+1, 50);
+		for(l = 0; l < 2; l++) {
+			move(k, 50);
+			printw("   ");
+			attrset(COLOR_PAIR(7));
+			for(j = 0; j < 8; j++)
+				printw("     ");
+			printw(" ");	
+			attrset(COLOR_PAIR(5));	
+			printw("   ");	
+			k++;
+		}	
+		move(k, 50);
 		attrset(COLOR_PAIR(5));	
 		printw("%d |", i);
-		attrset(COLOR_PAIR(2));
+		attrset(COLOR_PAIR(7));
 		printw(" ");
 		for(j = 0; j < 8; j++) {
 			if(a[j][i] == 0) {
-				attrset(COLOR_PAIR(2)); 
-				printw(" _ ");
+				attrset(COLOR_PAIR(7)); 
+				printw("  _  ");
 			}	
 			else if(a[j][i] == 1) {
 				attron(COLOR_PAIR(3) | A_BOLD);
-				printw(" O ");
+				printw("  O  ");
 				attroff(COLOR_PAIR(3) | A_BOLD);
 			}	
 			else {
 				attron(COLOR_PAIR(4) | A_BOLD);
-				printw(" O ");
+				printw("  O  ");
 				attroff(COLOR_PAIR(4) | A_BOLD);				
 			}
 			attrset(COLOR_PAIR(2));		
 		}
-		k+=2;
+		k++;
 		attrset(COLOR_PAIR(5));
 		printw("| %d", i);
-		attrset(COLOR_PAIR(2));	
+		
+			
+		// AFter this we want to add some spaces of diff colors
+		// We move the cursor to the app location ie next line then we print the app lines of spaces in app colors	
 	}
 	
+	for(l = 0; l < 2; l++) {
+			move(k, 50);
+			printw("   ");
+			attrset(COLOR_PAIR(7));
+			for(j = 0; j < 8; j++)
+				printw("     ");
+			printw(" ");	
+			attrset(COLOR_PAIR(5));	
+			printw("   ");	
+			k++;
+		}	
+	
 	attrset(COLOR_PAIR(5));
-	move(k,53);
-	for(i = 0; i < 8; i++) 
-		printw(" --");
-	printw(" ");	
+	move(k,52);
+	for(i = 0; i < 7; i++) 
+		printw("  --  ");	
 	k++;
+	printw(" ");
 	move(k,53);
 	printw(" ");
 	for(i = 0; i < 8; i++)  
-		printw(" %d ", i);
+		printw("  %d  ", i);
 	//printw(" ");	
 	k++;
 	printw("\n");
 	printw("\n");
 	
-	getch();	
+	//getch();	
 }
 int valid(int x, int y, int turn, int st) {
 	
@@ -316,14 +336,19 @@ int valid(int x, int y, int turn, int st) {
 			return -1;		
 			
 		if(empty(s)) {	
-			printw("\n");
+			clear();
+			printb();
+			move(6, 0);
+			//printw("\n");
 			init_pair(1, COLOR_YELLOW, COLOR_BLUE);
 			attrset(COLOR_PAIR(1));	
-			printw("INVALID MOVE PLAY AGAIN\n");
+			printw("INVALID MOVE PLAY AGAIN");
+			move(7, 0);
 			if(t == 1) {
 				printw("Player 2's turn");	
 				attron(COLOR_PAIR(4) | A_BOLD);
-				printw(" O\n");
+				printw(" O ");
+				move(8, 0);
 				scanw("%d%d", &x, &y);
 				attroff(COLOR_PAIR(4) | A_BOLD);		
 				valid(x,y,2, PLAY);
@@ -331,7 +356,8 @@ int valid(int x, int y, int turn, int st) {
 			else {
 				printw("Player 1's turn");
 				attron(COLOR_PAIR(3) | A_BOLD);
-				printw(" O\n");
+				printw(" O ");
+				move(8, 0);
 				scanw("%d%d", &x, &y);
 				attroff(COLOR_PAIR(3) | A_BOLD);		
 				valid(x,y,1, PLAY);

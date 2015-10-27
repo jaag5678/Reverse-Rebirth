@@ -6,8 +6,7 @@ int t = 2;
 void call() {
 	
 	initscr();
-	//move(20, 2);
-	//printw("HI");
+
 	rec();
 	fetch("Letters/o.txt");
 	napms(1000);
@@ -45,15 +44,7 @@ void call() {
 	
 	napms(2000);
 	clear();
-	/*
-	fetch("Letters/o.txt");
-	fetch("Letters/t.txt");
-	fetch("Letters/h.txt");
-	fetch("Letters/e.txt");
-	fetch("Letters/l.txt");
-	fetch("Letters/l.txt");
-	fetch("Letters/o.txt");
-	*/
+
 	menu();
 }	
 
@@ -78,9 +69,7 @@ void fetch(char *s) {
 
 void print() {
 	int i = 0, j = 0;
-	//move(20, 20);
 	refresh();
-	//move(50, 50);
 	
 	for(i = 0; i < 8; i++) {
 		move(15+i, 60);
@@ -96,112 +85,74 @@ void print() {
 		}
 		printw("\n");
 	}
-	//move(0, j);
 	refresh();
 }			
 
 void rec () {
 	
 	fetch("Letters/o.txt");
-	napms(LAG);
+	napms(LAG_1);
 	clear();
 	fetch("Letters/t.txt");
-	napms(LAG);
+	napms(LAG_1);
 	clear();
 	fetch("Letters/h.txt");
-	napms(LAG);
+	napms(LAG_1);
 	clear();
 	fetch("Letters/e.txt");
-	napms(LAG);
+	napms(LAG_1);
 	clear();
 	fetch("Letters/l.txt");
-	napms(LAG);
+	napms(LAG_1);
 	clear();
 	fetch("Letters/l.txt");
-	napms(LAG);
+	napms(LAG_1);
 	clear();
 	fetch("Letters/o.txt");
-	napms(LAG);
+	napms(LAG_1);
 	clear();
 }	
 
+void lag() {
+	int i;
+	for(i = 0; i < 3; i++) {
+		printw(" ");
+		refresh();
+		napms(LAG_2);
+	}	
+}	
+	
 void menu() {
-	
-	/* We Will have 4 options 
-	* START
-	* LOAD
-	* HELP
-	* EXIT
-	*/
-	
-	// START will have 2 choices vs Human and vs Computer
-	// Load will give you the list of files saved before
-	// HElp will tel you the rules of the game
-	// Exit will quit the game
 	
 	int i, j;
 	
 	move((LINES/2) - 3, (COLS/2) -20);
 	attrset(COLOR_PAIR(5) | A_BOLD | A_UNDERLINE);
-	for(i = 0; i < 3; i++) {
-		printw(" ");
-		refresh();
-		napms(50);
-	}	
-	printw("O");
+	
+	printw(" O");
 	refresh();
-	for(i = 0; i < 3; i++) {
-		printw(" ");
-		refresh();
-		napms(50);
-	}	
+	lag();
 	printw("T");
 	refresh();
-	for(i = 0; i < 3; i++) {
-		printw(" ");
-		refresh();
-		napms(50);
-	}	
+	lag();
 	printw("H");
 	refresh();
-	for(i = 0; i < 3; i++) {
-		printw(" ");
-		refresh();
-		napms(50);
-	}	
+	lag();
 	printw("E");
 	refresh();
-	for(i = 0; i < 3; i++) {
-		printw(" ");
-		refresh();
-		napms(50);
-	}	
+	lag();
 	printw("L");
 	refresh();
-	for(i = 0; i < 3; i++) {
-		printw(" ");
-		refresh();
-		napms(50);
-	}	
+	lag();
 	printw("L");
 	refresh();
-	for(i = 0; i < 3; i++) {
-		printw(" ");
-		refresh();
-		napms(50);
-	}	
+	lag();
 	printw("O");
 	refresh();
-	for(i = 0; i < 3; i++) {
-		printw(" ");
-		refresh();
-		napms(50);
-	}	
+	lag();	
 	napms(1000);
-	
-	//printw("***********OTHELLO*\n");
 	attroff(COLOR_PAIR(5));
-	//attrset(COLOR_PAIR(1) | A_BOLD | A_UNDERLINE);
+
 	move((LINES/2) - 2, (COLS/2) -10);
 	printw(">>>>>> 1.START\n");
 	move((LINES/2) - 1, (COLS/2) -10);
@@ -226,6 +177,8 @@ void menu() {
 			switch(j) {
 				case 1:
 					clear();
+					printw("VS HUMAN [");
+					printw("Type -1 to Save]");
 					init_pair(1, COLOR_YELLOW, COLOR_BLUE);
 					attrset(COLOR_PAIR(1));
 					creatmb();
@@ -245,6 +198,8 @@ void menu() {
 					switch(k) {
 						case 1: {
 							clear();
+							printw("VS COMP [");
+							printw("Type -1 to Save]");
 							init_pair(1, COLOR_YELLOW, COLOR_BLUE);
 							attrset(COLOR_PAIR(1));
 							creatmb();
@@ -254,6 +209,8 @@ void menu() {
 						break;
 						case 2: {
 							clear();
+							printw("VS COMP [");
+							printw("Type -1 to Save]");
 							init_pair(1, COLOR_YELLOW, COLOR_BLUE);
 							attrset(COLOR_PAIR(1));
 							creatmb();
@@ -366,7 +323,7 @@ void save(int t) {
 	
 	char s[5];
 	printw("Type the name you want to keep for your saved game\n");
-	printw("Hi\n");
+	//printw("Hi\n");
 	scanw("%s", s);
 	refresh();
 	//printw("Hi\n");
@@ -376,7 +333,7 @@ void save(int t) {
 	FILE *f;
 	//printw("Hi\n");
 	//printw("\n%s\n", s);
-	f = fopen(q, "wb");
+	f = fopen(q, "a+");
 	while(1) {	
 		fprintf(f, "%d", a[j++][i]);
 		fprintf(f, "%c", ' ');
@@ -388,11 +345,15 @@ void save(int t) {
 			break;	 
 	}
 	//Gotta save the list of names of saved files in another list
-	f = fopen(REF, "w");
+	fclose(f);
+	
+	f = fopen(REF, "a+");
 	fprintf(f, "%s", s);
 	fprintf(f, "%c", ' ');
 	fprintf(f, "%d", t);
 	fprintf(f, "%c", '\n');
+	fclose(f);
+	
 	getch();
 	menu();
 }
@@ -414,7 +375,6 @@ void load() {
 	printw("0Which game you wanna load??\n");
 	scanw("%s", s);
 	refresh();
-	printw("HAHAHH\n");
 	
 	char *q = malloc(sizeof(char) * 20);
 	q = strcat(q, "Save/");
@@ -487,11 +447,13 @@ void vs_comp1() {
 			printw("Human's turn\n");
 			scanw("%d%d", &x, &y);
 			t = 1;
+			if(x == -1) {
+				save(t);
+				break;
+			}	
 			valid(x,y,t, PLAY);
 		}
 		else {
-			//printw("Here\n");
-			//refresh();
 			t = 2;
 			for(d = 0; d < 8; d++) {
 				for(b = 0; b < 8; b++) {
@@ -517,7 +479,6 @@ void vs_comp1() {
 }		
 				
 void vs_comp2() {
-
 
 	int x, y, ty;
 	int i, tog = 0;
@@ -562,22 +523,21 @@ void vs_comp2() {
 			printw("Human's turn\n");
 			scanw("%d%d", &x, &y);
 			t = 1;
+			if(x == -1) {
+				save(t);
+				break;
+			}	
 			valid(x,y,t, PLAY);
 		}
 		else {	
-	// FIrst make b array zero
 			t = 2;
 			for(x = 0; x < 8; x ++) 
 				for(y = 0; y < 8; y++)
 					b[x][y] = 0;
 			
-	// Then make a double loop with the general calling of valid func
 			for(x = 0; x < 8; x ++) 
 				for(y = 0; y < 8; y++) 
 					valid(x, y, t, COMP2);			
-			
-	// However here the st is COMP2.. Which will make us to modify the func slightly
-	// Once as per our idea the thing is done.. check the max of elements in array b
 	
 			int max = b[0][0];
 			int max_x = 0; 
@@ -602,7 +562,6 @@ void vs_comp2() {
 	endresult();
 }			
 				
-	// And pass the indices of the array to valid func with st as PLAY
 	
 	
 	
