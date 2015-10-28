@@ -655,7 +655,13 @@ void vs_comp3() {
 				}
 			}	
 	// now go and make app changes to the valid function
-	
+	/*
+		if(g->p == -1) {
+			tog++;
+			if(tog == 2)
+				endresult();
+		}	
+		*/		
 	//Once done now call valid func with the coord stored in g
 			valid(g->x, g->y, t, PLAY);
 		}	
