@@ -474,10 +474,16 @@ void vs_comp1() {
 						break;
 				}	
 				if(c == 1) {
+					napms(1000);
 					valid(d, b, t, PLAY);	
 					break;
 				}	
 			}
+			if(c == -1) {
+				tog++;
+				if(tog == 2)
+					endresult();
+			}		
 		}
 		
 		clear();
@@ -550,9 +556,9 @@ void vs_comp2() {
 				for(y = 0; y < 8; y++) 
 					valid(x, y, t, COMP2);			
 	
-			int max = b[0][0];
-			int max_x = 0; 
-			int max_y = 0;
+			int max = -1;
+			int max_x = -1; 
+			int max_y = -1;
 			for(x = 0; x < 8; x ++) { 
 				for(y = 0; y < 8; y++) { 
 					if(max < b[x][y]) { 
@@ -562,6 +568,12 @@ void vs_comp2() {
 					}
 				}
 			}	
+			if(max == -1) {
+				tog++;
+				if(tog == 2)
+					endresult();
+			}		
+			napms(2000);
 			valid(max_x, max_y, t, PLAY);
 		}		
 		clear();
@@ -654,16 +666,14 @@ void vs_comp3() {
 					}		
 				}
 			}	
-	// now go and make app changes to the valid function
-		if(g->p == -1) {
-			tog++;
-			if(tog == 2)
-				endresult();
-		}			
-	//Once done now call valid func with the coord stored in g
+			if(g->p == -1) {
+				tog++;
+				if(tog == 2)
+					endresult();
+			}		
+			napms(3000);
 			valid(g->x, g->y, t, PLAY);
 		}	
-	//Done....
 		clear();
 		printb();
 		refresh();

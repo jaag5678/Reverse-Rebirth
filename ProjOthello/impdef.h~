@@ -37,7 +37,7 @@ typedef struct prior {
 	int i;
 	int p;
 }prior;		
-prior *g = NULL;
+prior *g;
 	
 
 int a[8][8];

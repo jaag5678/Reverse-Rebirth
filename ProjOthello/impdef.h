@@ -15,6 +15,8 @@
 
 #define REF "Save/LoadList.txt"
 
+#define INV -2
+
 #define VMOV -1
 #define PLAY 1
 
