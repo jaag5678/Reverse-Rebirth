@@ -20,6 +20,8 @@
 #define VMOV -1
 #define PLAY 1
 
+#define COUNT 5
+
 #define COMP1 2
 #define COMP2 3
 #define COMP3 4

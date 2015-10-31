@@ -152,17 +152,17 @@ void menu() {
 	lag();	
 	napms(1000);
 	attroff(COLOR_PAIR(5));
-
-	move((LINES/2) - 2, (COLS/2) -10);
-	printw(">>>>>> 1.START\n");
-	move((LINES/2) - 1, (COLS/2) -10);
-	printw(">>>>>> 2.LOAD\n");
-	move((LINES/2) , (COLS/2) -10);
-	printw(">>>>>> 3.HELP\n");
-	move((LINES/2) + 1, (COLS/2) -10);
-	printw(">>>>>> 4.EXIT\n");
-	move((LINES/2) + 3, (COLS/2) -10);
 	attroff(A_UNDERLINE);
+	move((LINES/2) - 2, (COLS/2) -6);
+	printw("1.START\n");
+	move((LINES/2) - 1, (COLS/2) -6);
+	printw("2.LOAD\n");
+	move((LINES/2) , (COLS/2) -6);
+	printw("3.HELP\n");
+	move((LINES/2) + 1, (COLS/2) -6);
+	printw(" 4.EXIT\n");
+	move((LINES/2) + 3, (COLS/2) -6);
+	
 	printw("\n\n-> Select your choice.......");
 	scanw("%d", &i);
 	

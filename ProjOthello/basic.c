@@ -4,32 +4,48 @@
 void creatmb() {
 	
 	int i, j;
-	
-	//set all elements to zero initiallly
 	for(i = 0; i < 8; i++) {
 		for(j = 0; j < 8; j++) {
 			a[i][j] = 0;
 		}
 	}
-	
-	// Now set middle elements
 		a[3][3] = a[4][4] = 1;
 		a[3][4] = a[4][3] = 2;
-		
 }
 
 // We supply the coordinates to the func to see if the move is valid
 void printb() {
 	
 	int i, j, k = 5, l;
-	attrset(COLOR_PAIR(5));
+	int b, w;
+	
+	b = 0;
+	w = 0;
+	
+	for(i = 0; i < 8; i++) {
+		for(j = 0 ; j < 8; j++) {
+			if(a[i][j] == 2)
+				b++;
+			else if(a[i][j] == 1)
+				w++;	
+		}
+	}
+	
+	attrset(COLOR_PAIR(3));
+	move(1, 70);
+	printw(" %d ", w);
+	
+	attrset(COLOR_PAIR(4));
+	move(1, 75);
+	printw(" %d ", b);
+		
+	attrset(COLOR_PAIR(5) | A_BOLD);
 	
 	move(k,53);
 	printw(" ");
 	for(i = 0; i < 8; i++)  
 		printw("  %d  ", i);
 	k++;
-	//printw(" ");
 	printw("\n");
 	
 	move(k,52);
@@ -51,7 +67,7 @@ void printb() {
 			k++;
 		}	
 		move(k, 50);
-		attrset(COLOR_PAIR(5));	
+		attrset(COLOR_PAIR(5) | A_BOLD);	
 		printw("%d |", i);
 		attrset(COLOR_PAIR(7));
 		printw(" ");
@@ -73,12 +89,8 @@ void printb() {
 			attrset(COLOR_PAIR(2));		
 		}
 		k++;
-		attrset(COLOR_PAIR(5));
+		attrset(COLOR_PAIR(5) | A_BOLD);
 		printw("| %d", i);
-		
-			
-		// AFter this we want to add some spaces of diff colors
-		// We move the cursor to the app location ie next line then we print the app lines of spaces in app colors	
 	}
 	
 	for(l = 0; l < 2; l++) {
@@ -88,12 +100,12 @@ void printb() {
 			for(j = 0; j < 8; j++)
 				printw("     ");
 			printw(" ");	
-			attrset(COLOR_PAIR(5));	
+			attrset(COLOR_PAIR(5) | A_BOLD);	
 			printw("   ");	
 			k++;
 		}	
 	
-	attrset(COLOR_PAIR(5));
+	attrset(COLOR_PAIR(5) | A_BOLD);
 	move(k,52);
 	for(i = 0; i < 7; i++) 
 		printw("  --  ");	
@@ -102,13 +114,10 @@ void printb() {
 	move(k,53);
 	printw(" ");
 	for(i = 0; i < 8; i++)  
-		printw("  %d  ", i);
-	//printw(" ");	
+		printw("  %d  ", i);	
 	k++;
 	printw("\n");
 	printw("\n");
-	
-	//getch();	
 }
 int valid(int x, int y, int turn, int st) {
 	
@@ -236,7 +245,7 @@ int valid(int x, int y, int turn, int st) {
 		}		
 	
 	// Fifth we go DIAGONALLY RIGHT DOWN.. 
-		for(i = 1; ((x+i) < 8 && (y+i) < 8); i++) {
+		for(i = 1; ((x+i) <= 8 && (y+i) <= 8); i++) {
 			if(a[x+i][y+i] == t)
 				continue;
 			else {
@@ -264,7 +273,7 @@ int valid(int x, int y, int turn, int st) {
 		}
 			
 	// Sixth we go DIAGONALLY LEFT UP.. 
-		for(i = 1; ((x-i) > 0 && (y-i) > 0); i++) {
+		for(i = 1; ((x-i) >= 0 && (y-i) >= 0); i++) {
 			if(a[x-i][y-i] == t)
 				continue;
 			else {
@@ -294,7 +303,7 @@ int valid(int x, int y, int turn, int st) {
 		}			
 	
 	// Seventh we go DIAGONALLY RIGHT UP.. 
-		for(i = 1; ((x+i) < 8 && (y-i) > 0 ); i++) {
+		for(i = 1; ((x+i) <= 8 && (y-i) >= 0 ); i++) {
 			if(a[x+i][y-i] == t)
 				continue;
 			else {
@@ -324,7 +333,7 @@ int valid(int x, int y, int turn, int st) {
 		}			
 	
 	// Eighth we go DIAGONALLY LEFT DOWN.. 
-		for(i = 1; ((x-i) > 0 && (y+i) < 8 ); i++) {
+		for(i = 1; ((x-i) >= 0 && (y+i) <= 8 ); i++) {
 			if(a[x-i][y+i] == t)
 				continue;
 			else {
@@ -391,6 +400,8 @@ int valid(int x, int y, int turn, int st) {
 				printw(" O ");
 				move(8, 0);
 				scanw("%d%d", &x, &y);
+				if(x == -1)
+					save();
 				attroff(COLOR_PAIR(4) | A_BOLD);		
 				valid(x,y,2, PLAY);
 			}
@@ -400,6 +411,8 @@ int valid(int x, int y, int turn, int st) {
 				printw(" O ");
 				move(8, 0);
 				scanw("%d%d", &x, &y);
+				if(x == -1)
+					save();
 				attroff(COLOR_PAIR(3) | A_BOLD);		
 				valid(x,y,1, PLAY);
 				attroff(COLOR_PAIR(1));
