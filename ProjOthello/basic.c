@@ -14,111 +14,7 @@ void creatmb() {
 }
 
 // We supply the coordinates to the func to see if the move is valid
-void printb() {
-	
-	int i, j, k = 5, l;
-	int b, w;
-	
-	b = 0;
-	w = 0;
-	
-	for(i = 0; i < 8; i++) {
-		for(j = 0 ; j < 8; j++) {
-			if(a[i][j] == 2)
-				b++;
-			else if(a[i][j] == 1)
-				w++;	
-		}
-	}
-	
-	attrset(COLOR_PAIR(3));
-	move(1, 70);
-	printw(" %d ", w);
-	
-	attrset(COLOR_PAIR(4));
-	move(1, 75);
-	printw(" %d ", b);
-		
-	attrset(COLOR_PAIR(5) | A_BOLD);
-	
-	move(k,53);
-	printw(" ");
-	for(i = 0; i < 8; i++)  
-		printw("  %d  ", i);
-	k++;
-	printw("\n");
-	
-	move(k,52);
-	for(i = 0; i < 7; i++) 
-		printw("  --  ");
-	k++;
-	printw(" \n");
-		
-	for(i = 0; i < 8; i++) {
-		for(l = 0; l < 2; l++) {
-			move(k, 50);
-			printw("   ");
-			attrset(COLOR_PAIR(7));
-			for(j = 0; j < 8; j++)
-				printw("     ");
-			printw(" ");	
-			attrset(COLOR_PAIR(5));	
-			printw("   ");	
-			k++;
-		}	
-		move(k, 50);
-		attrset(COLOR_PAIR(5) | A_BOLD);	
-		printw("%d |", i);
-		attrset(COLOR_PAIR(7));
-		printw(" ");
-		for(j = 0; j < 8; j++) {
-			if(a[j][i] == 0) {
-				attrset(COLOR_PAIR(7)); 
-				printw("  _  ");
-			}	
-			else if(a[j][i] == 1) {
-				attron(COLOR_PAIR(3) | A_BOLD);
-				printw("  O  ");
-				attroff(COLOR_PAIR(3) | A_BOLD);
-			}	
-			else {
-				attron(COLOR_PAIR(4) | A_BOLD);
-				printw("  O  ");
-				attroff(COLOR_PAIR(4) | A_BOLD);				
-			}
-			attrset(COLOR_PAIR(2));		
-		}
-		k++;
-		attrset(COLOR_PAIR(5) | A_BOLD);
-		printw("| %d", i);
-	}
-	
-	for(l = 0; l < 2; l++) {
-			move(k, 50);
-			printw("   ");
-			attrset(COLOR_PAIR(7));
-			for(j = 0; j < 8; j++)
-				printw("     ");
-			printw(" ");	
-			attrset(COLOR_PAIR(5) | A_BOLD);	
-			printw("   ");	
-			k++;
-		}	
-	
-	attrset(COLOR_PAIR(5) | A_BOLD);
-	move(k,52);
-	for(i = 0; i < 7; i++) 
-		printw("  --  ");	
-	k++;
-	printw(" ");
-	move(k,53);
-	printw(" ");
-	for(i = 0; i < 8; i++)  
-		printw("  %d  ", i);	
-	k++;
-	printw("\n");
-	printw("\n");
-}
+
 int valid(int x, int y, int turn, int st) {
 	
 	stack *s;
@@ -387,36 +283,7 @@ int valid(int x, int y, int turn, int st) {
 			
 		if(empty(s)) {	
 			clear();
-			printb();
-			move(6, 0);
-			//printw("\n");
-			init_pair(1, COLOR_YELLOW, COLOR_BLUE);
-			attrset(COLOR_PAIR(1));	
-			printw("INVALID MOVE PLAY AGAIN");
-			move(7, 0);
-			if(t == 1) {
-				printw("Player 2's turn");	
-				attron(COLOR_PAIR(4) | A_BOLD);
-				printw(" O ");
-				move(8, 0);
-				scanw("%d%d", &x, &y);
-				if(x == -1)
-					save();
-				attroff(COLOR_PAIR(4) | A_BOLD);		
-				valid(x,y,2, PLAY);
-			}
-			else {
-				printw("Player 1's turn");
-				attron(COLOR_PAIR(3) | A_BOLD);
-				printw(" O ");
-				move(8, 0);
-				scanw("%d%d", &x, &y);
-				if(x == -1)
-					save();
-				attroff(COLOR_PAIR(3) | A_BOLD);		
-				valid(x,y,1, PLAY);
-				attroff(COLOR_PAIR(1));
-			}		
+			return 0;
 		}
 		else {		
 			while(!empty(s)) {
@@ -424,7 +291,8 @@ int valid(int x, int y, int turn, int st) {
 				printw("%d %d", z.a, z.i);
 				change(z.a, z.i, x, y, turn);
 			}	 	
-		}									
+		}
+	return -50;										
 }
 
 void change(short int c, short int b, int x, int y, int t) {

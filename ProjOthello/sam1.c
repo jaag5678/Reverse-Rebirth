@@ -7,8 +7,10 @@ int main() {
 	int x, y, i, t;
 	initscr();
 	
+	keypad(stdscr, TRUE);
+	
 	start_color();
-	init_pair(1, COLOR_CYAN, COLOR_YELLOW);
+	init_pair(1, COLOR_BLACK, COLOR_WHITE);
 	init_pair(2, COLOR_MAGENTA, COLOR_MAGENTA);
 	init_pair(3, COLOR_BLUE, COLOR_WHITE);
 	init_pair(4, COLOR_BLACK, COLOR_CYAN);
@@ -17,6 +19,8 @@ int main() {
 	init_pair(7, COLOR_CYAN, COLOR_BLACK);
 	
 	call();
+	flushinp();
+	menu();
 	
 	clear();	
 	getch();
