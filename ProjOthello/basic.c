@@ -1,5 +1,21 @@
+/*THis is a Program to play the Board game OTHELLO !:)
+    Copyright (C) <2015>  <Ak$h@y G>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include"basic.h"
-#include"ncurses.h"
 
 void creatmb() {
 	
@@ -282,13 +298,11 @@ int valid(int x, int y, int turn, int st) {
 		}				
 			
 		if(empty(s)) {	
-			clear();
 			return 0;
 		}
 		else {		
 			while(!empty(s)) {
 				z = pop(s);
-				printw("%d %d", z.a, z.i);
 				change(z.a, z.i, x, y, turn);
 			}	 	
 		}
@@ -349,35 +363,6 @@ void change(short int c, short int b, int x, int y, int t) {
 		break;													
 	}	
 }	
-			
-void endresult() {
-	
-	int i,j, ct1, ct2;
-	ct1 = 0;
-	ct2 = 0;
-				
-	for(i = 0; i < 8; i++) {
-		for(j = 0; j < 8; j++) {
-			if(a[i][j] == 1)
-				ct1++;
-			else
-				ct2++;	
-		}
-	}
-	
-	if(ct1 > ct2) 
-		printf("Player 1 wins\n");
-	else if(ct2 > ct1)
-		printf("Player 2 wins\n");
-	else
-		printf("It's a draw\n");
-	
-	menu();	
-}				  
-  
-  
-  
-  
   										
 							
 								

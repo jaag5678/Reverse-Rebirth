@@ -1,3 +1,20 @@
+/*THis is a Program to play the Board game OTHELLO !:)
+    Copyright (C) <2015>  <Ak$h@y G>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include"start.h"
 #include<ncurses.h>
 
@@ -126,6 +143,8 @@ void menu() {
 	int i, j;
 	int cnt = 1;
 	
+	clear();
+	
 	move((LINES/2) - 3, (COLS/2) -20);
 	attrset(COLOR_PAIR(5) | A_BOLD | A_UNDERLINE);
 	
@@ -153,15 +172,15 @@ void menu() {
 	napms(1000);
 	attroff(COLOR_PAIR(5));
 	attroff(A_UNDERLINE);
-	move((LINES/2) - 2, (COLS/2) -6);
+	move((LINES/2) - 2, (COLS/2) -8);
 	printw("1 -> START\n");
-	move((LINES/2) - 1, (COLS/2) -6);
+	move((LINES/2) - 1, (COLS/2) -8);
 	printw("2 -> LOAD\n");
-	move((LINES/2) , (COLS/2) -6);
+	move((LINES/2) , (COLS/2) -8);
 	printw("3 -> HELP\n");
-	move((LINES/2) + 1, (COLS/2) -6);
+	move((LINES/2) + 1, (COLS/2) -8);
 	printw("4 -> EXIT\n");
-	move((LINES/2) + 3, (COLS/2) -6);
+	move((LINES/2) + 3, (COLS/2) -8);
 				
 	printw("\n\n-> Select your choice.......");
 	scanw("%d", &i);
@@ -173,6 +192,8 @@ void menu() {
 			printw("&&&& &&& && & 1. Vs Human & && &&& &&&&\n");
 			move((LINES/2) - 2, (COLS/2) -9);
 			printw("&&&& &&& && & 2. Vs Computer & && &&& &&&&\n");
+			move((LINES/2), (COLS/2) -9);
+			printw("3 -> Back\n");
 			scanw("%d", &j);
 			switch(j) {
 				case 1:
@@ -187,12 +208,15 @@ void menu() {
 				break;
 				case 2: {
 					int k;
+					clear();
 					move((LINES/2) - 3, (COLS/2) -9);
 					printw("1. Easy\n");
 					move((LINES/2) - 2, (COLS/2) -9);
 					printw("2. Medium\n");
 					move((LINES/2) - 1, (COLS/2) -9);
 					printw("3. Hard\n");
+					move((LINES/2) + 1, (COLS/2) -9);
+					printw("4. Back\n");
 					printw("Enter your choice\n");
 					scanw("%d", &k);
 					switch(k) {
@@ -200,7 +224,6 @@ void menu() {
 							r3 = COMP1;
 							clear();
 							printw("VS COMP [");
-							printw("Type -1 to Save]");
 							init_pair(1, COLOR_YELLOW, COLOR_BLUE);
 							attrset(COLOR_PAIR(1));
 							creatmb();
@@ -212,7 +235,6 @@ void menu() {
 							r3 = COMP2;
 							clear();
 							printw("VS COMP [");
-							printw("Type -1 to Save]");
 							init_pair(1, COLOR_YELLOW, COLOR_BLUE);
 							attrset(COLOR_PAIR(1));
 							creatmb();
@@ -224,24 +246,34 @@ void menu() {
 							r3 = COMP3;
 							clear();
 							printw("VS COMP [");
-							printw("Type -1 to Save]");
 							init_pair(1, COLOR_YELLOW, COLOR_BLUE);
 							attrset(COLOR_PAIR(1));
 							creatmb();
 							printb();
 							vs_comp3();
 						}
-						break;	
-					}			
+						break;
+						case 4: {
+							menu();
+						}
+						break;		
+					}
+				}				
 				break;
+				
+				case 3: {
+					menu();
 				}
-			}
+				break;	
+			}			
 		}		
 		break;
+		
 		case 2: {
 			load();
 		}	
 		break;
+		
 		case 3: {
 			clear();
 			refresh();
@@ -255,16 +287,15 @@ void menu() {
 			fclose(f);
 			getch();
 			menu();
-		}		  
-			
+		}		  		
 		break;
-		case 4: 
-			return;
+		
+		case 4: {
+			endwin();
+			exit(1);
+		}	
 		break;
 	}
-	
-	
-	
 }								
 
 void printb() {
@@ -275,7 +306,8 @@ void printb() {
 	b = 0;
 	w = 0;
 	
-	printw("Type -1 to Save]");
+	printw("Type -1 to Save]\n");
+	printw("Type -2 to quit");
 	
 	for(i = 0; i < 8; i++) {
 		for(j = 0 ; j < 8; j++) {
@@ -440,14 +472,10 @@ void load() {
 	refresh();
 	
 	char *q = malloc(sizeof(char) * 20);
-	printf("Hi\n");
 	q = strcpy(q, "Save/");
 	q = strcat(q, s);
-	printf("Hi\n");
 	
 	p = fopen(q, "r");
-	printf("Hi\n");
-	printf("%s\n", q);
 	
 	while((fscanf(p, "%d", &a[j++][i])) != EOF) {
 		if (j == 8) {
@@ -459,7 +487,6 @@ void load() {
 	}
 	fscanf(p, "%d", &t);
 	fscanf(p, "%d", &z);
-	printw("%d %d \n", t, z);
 	fclose(p);
 	fclose(f);
 	getch();
@@ -477,6 +504,7 @@ void load() {
 
 void inv_print() {
 		int x, y, inv;
+		clear();
 		printb();
 		move(6, 0);
 		//printw("\n");
@@ -492,6 +520,8 @@ void inv_print() {
 			scanw("%d%d", &x, &y);
 			if(x == -1)
 				save(t, r3);
+			else if(x == -2)
+				menu();	
 			attroff(COLOR_PAIR(4) | A_BOLD);		
 			inv = valid(x,y,2, PLAY);
 			if(inv == 0) 
@@ -505,6 +535,8 @@ void inv_print() {
 			scanw("%d%d", &x, &y);
 			if(x == -1)
 				save(t, r3);
+			else if(x == -2)
+				menu();	
 			attroff(COLOR_PAIR(3) | A_BOLD);		
 			inv = valid(x,y,1, PLAY);
 			if(inv == 0)
@@ -512,7 +544,32 @@ void inv_print() {
 			attroff(COLOR_PAIR(1));
 		}	
 }	
+
+void endresult() {
+	
+	int i,j, ct1, ct2;
+	ct1 = 0;
+	ct2 = 0;
 				
+	for(i = 0; i < 8; i++) {
+		for(j = 0; j < 8; j++) {
+			if(a[i][j] == 1)
+				ct1++;
+			else
+				ct2++;	
+		}
+	}
+	
+	if(ct1 > ct2) 
+		printf("Player 1 wins\n");
+	else if(ct2 > ct1)
+		printf("Player 2 wins\n");
+	else
+		printf("It's a draw\n");
+	
+	menu();	
+}				  
+  					
 void vs_human() {
 	int i, tog = 0;
 	int x, y, ty, inv;
@@ -564,6 +621,9 @@ void vs_human() {
 			save(t, 1);
 			break;
 		}	
+		else if (x == -2)
+			menu();
+			
 		inv = valid(x,y,t, PLAY);
 		if(inv == 0) 
 			inv_print();
@@ -628,7 +688,10 @@ void vs_comp1() {
 			if(x == -1) {
 				save(t, COMP1);
 				break;
-			}	
+			}
+			else if (x == -2)
+				menu();
+					
 			inv = valid(x,y,t, PLAY);
 			if(inv == 0) 
 				inv_print();
@@ -713,6 +776,9 @@ void vs_comp2() {
 				save(t, COMP2);
 				break;
 			}	
+			else if (x == -2)
+				menu();
+				
 			inv = valid(x,y,t, PLAY);
 			if(inv == 0)
 				inv_print();
@@ -765,15 +831,11 @@ void vs_comp3() {
 	
 	// Make the priority table ready to refer
 	FILE *f;
-	//printw("HAHA\n");
-	//refresh();
 	f = fopen(PT, "r");
 	for(k = 0; k < 8; k++)
 		for(j = 0; j < 8; j++)
 			fscanf(f, "%d", &b[j][k]);
-	//printw("HEHE\n");
 	
-	//refresh();
 	g = malloc(sizeof(prior));
 	
 	attrset(COLOR_PAIR(1));
@@ -820,6 +882,9 @@ void vs_comp3() {
 				save(t, COMP3);
 				break;
 			}	
+			else if (x == -2)
+				menu();
+				
 			inv = valid(x,y,t, PLAY);
 			if(inv == 0)
 				inv_print();
@@ -857,7 +922,7 @@ void vs_comp3() {
 	endresult();
 }			
 				
-	
+
 		
 	
 	
